@@ -8,47 +8,39 @@
       body {
         font-family: Arial, sans-serif;
         background: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
         margin: 0;
         padding: 20px;
+        display: flex;
+        justify-content: center;
       }
       .container {
         background: #fff;
         border-radius: 10px;
-        padding: 20px;
+        padding: 20px 30px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
         max-width: 600px;
+        width: 100%;
       }
-      h1 {
+      h1, p {
         text-align: center;
-        margin-bottom: 10px;
-      }
-      p {
-        text-align: center;
-        margin-bottom: 20px;
       }
       form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        margin-top: 20px;
+        text-align: center;
       }
       input[type="text"] {
+        width: 80%;
         padding: 10px;
         font-size: 16px;
-        width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         border: 1px solid #ccc;
         border-radius: 5px;
       }
       button {
         padding: 10px 20px;
-        font-size: 16px;
-        color: #fff;
         background: #007acc;
+        color: #fff;
+        font-size: 16px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
@@ -57,66 +49,80 @@
         background: #005fa3;
       }
       .preview {
+        margin: 20px auto;
         text-align: center;
-        margin-top: 20px;
       }
-      #downloadSection {
+      .preview img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .download {
         text-align: center;
-        margin-top: 20px;
+        margin-top: 15px;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>Steak Stats SVG Generator</h1>
-      <p>Enter your GitHub username to generate your custom GitHub streak SVG.</p>
+      <p>
+        Enter your GitHub username to fetch your GitHub streak SVG – just like the one from the external service.
+      </p>
       <form id="svgForm">
-        <input type="text" id="username" placeholder="GitHub Username" required />
+        <input
+          type="text"
+          id="username"
+          placeholder="GitHub Username"
+          required
+        />
+        <br />
         <button type="submit">Generate SVG</button>
       </form>
       <div class="preview" id="preview"></div>
-      <div id="downloadSection" hidden>
+      <div class="download" id="downloadSection" hidden>
         <button id="downloadBtn">Download SVG</button>
       </div>
     </div>
+
     <script>
-      document.getElementById("svgForm").addEventListener("submit", function (e) {
+      document.getElementById('svgForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        const username = document.getElementById("username").value.trim();
-        const svgTemplate = `
-<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ff8a00;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#e52e71;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <rect x="10" y="10" width="480" height="180" rx="15" ry="15" fill="url(#grad)" />
-  <text x="250" y="50" text-anchor="middle" font-family="Arial" font-size="24" fill="#fff">
-    Steak Stats
-  </text>
-  <text x="250" y="90" text-anchor="middle" font-family="Arial" font-size="18" fill="#fff">
-    GitHub Streak for:
-  </text>
-  <text x="250" y="120" text-anchor="middle" font-family="Arial" font-size="22" fill="#fff">
-    ${username}
-  </text>
-  <text x="250" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="#fff">
-    Keep the streak burning!
-  </text>
-</svg>`;
-        document.getElementById("preview").innerHTML = svgTemplate;
-        document.getElementById("downloadSection").hidden = false;
-        document.getElementById("downloadBtn").onclick = function () {
-          const blob = new Blob([svgTemplate], { type: "image/svg+xml" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "steak-stats.svg";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
+        const username = document.getElementById('username').value.trim();
+        if(!username) return;
+        
+        // The URL exactly matches the external service image, with the "radical" theme.
+        const imageUrl = `https://streak-stats.demolab.com/?user=${encodeURIComponent(username)}&theme=radical`;
+        
+        // Display the SVG image in preview using an <img> tag.
+        document.getElementById('preview').innerHTML = `
+          <img src="${imageUrl}" alt="GitHub Streak SVG for ${username}" />
+        `;
+        document.getElementById('downloadSection').hidden = false;
+
+        // Set up the download button to fetch the SVG and trigger a download.
+        document.getElementById('downloadBtn').onclick = async function () {
+          try {
+            const response = await fetch(imageUrl);
+            if (!response.ok) {
+              alert('Failed to fetch SVG.');
+              return;
+            }
+            const svgText = await response.text();
+            const blob = new Blob([svgText], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'steak-stats.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          } catch (error) {
+            console.error(error);
+            alert('Error fetching SVG.');
+          }
         };
       });
     </script>
