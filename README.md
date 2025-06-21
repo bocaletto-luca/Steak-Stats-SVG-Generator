@@ -2,6 +2,8 @@
 
 A simple, client-side web application that generates a custom GitHub streak SVG based on a user-provided username. No API calls, tokens, or installations are required. Just enter your GitHub username and download a ready-to-use SVG to showcase your GitHub streak in your README.
 
+[![Test Online](https://img.shields.io/badge/Test%20Online-Click%20Here-blue)](https://<bocaletto-luca>.github.io/steak-stats-svg-generator/)
+
 ## Features
 
 - **Client-Side Generation:** All processing is done in the browser using simple HTML, CSS, and JavaScript.
