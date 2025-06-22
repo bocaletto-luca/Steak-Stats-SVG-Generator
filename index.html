@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Steak Stats SVG Generator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Steak Stats SVG Generator</h1>
+      <p>
+        Inserisci il tuo username GitHub per generare il grafico del tuo streak nel tema "radical".
+      </p>
+      <form id="svgForm">
+        <input type="text" id="username" placeholder="GitHub Username" required />
+        <button type="submit">Generate SVG</button>
+      </form>
+      <div class="preview" id="preview"></div>
+      <div class="download" id="downloadSection" style="display: none;">
+        <button id="downloadBtn">Download SVG (completo)</button>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
