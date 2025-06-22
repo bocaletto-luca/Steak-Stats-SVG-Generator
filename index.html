@@ -1,16 +1,39 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
   <head>
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Steak Stats SVG Generator</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Generate your GitHub streak SVG using the 'radical' theme. Created by Bocaletto Luca (GitHub: bocaletto-luca)." />
+    <meta name="keywords" content="GitHub, SVG, streak, generator, radical theme, steak stats, bocaletto-luca, open source" />
+    <meta name="author" content="Bocaletto Luca" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Steak Stats SVG Generator - Bocaletto Luca" />
+    <meta property="og:description" content="Generate your GitHub streak SVG using the 'radical' theme." />
+    <meta property="og:type" content="website" />
+    <!-- You can customize the URL and image based on your project -->
+    <meta property="og:url" content="https://github.com/bocaletto-luca/steak-stats-svg-generator" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/bocaletto-luca/steak-stats-svg-generator/main/preview.png" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Steak Stats SVG Generator - Bocaletto Luca" />
+    <meta name="twitter:description" content="Generate your GitHub streak SVG using the 'radical' theme." />
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/bocaletto-luca/steak-stats-svg-generator/main/preview.png" />
+
+    <title>Steak Stats SVG Generator - Bocaletto Luca</title>
+    
+    <!-- External CSS -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
       <h1>Steak Stats SVG Generator</h1>
       <p>
-        Inserisci il tuo username GitHub per generare il grafico del tuo streak nel tema "radical".
+        Enter your GitHub username to generate your GitHub streak SVG using the "radical" theme.
       </p>
       <form id="svgForm">
         <input type="text" id="username" placeholder="GitHub Username" required />
@@ -18,9 +41,20 @@
       </form>
       <div class="preview" id="preview"></div>
       <div class="download" id="downloadSection" style="display: none;">
-        <button id="downloadBtn">Download SVG (completo)</button>
+        <button id="downloadBtn">Download SVG (complete)</button>
       </div>
     </div>
+
+    <footer>
+      <p>
+        Created by 
+        <a href="https://github.com/bocaletto-luca" target="_blank" rel="noopener noreferrer">Bocaletto Luca</a>
+        &copy; 2025. 
+        <a href="https://github.com/bocaletto-luca/steak-stats-svg-generator" target="_blank" rel="noopener noreferrer">Source Code</a>
+      </p>
+    </footer>
+
+    <!-- External JS -->
     <script src="main.js"></script>
   </body>
 </html>
