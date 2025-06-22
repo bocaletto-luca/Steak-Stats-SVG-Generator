@@ -1,48 +1,81 @@
-document.getElementById("svgForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const username = document.getElementById("username").value.trim();
-    if (!username) return;
-    
-    // Build the external image URL using the "radical" theme.
-    const imageUrl = `https://streak-stats.demolab.com/?user=${encodeURIComponent(username)}&theme=radical`;
-    
-    // Insert an <img> element with the external URL.
-    document.getElementById("preview").innerHTML = `
-      <img src="${imageUrl}" alt="GitHub Streak for ${username}" />
-    `;
-    document.getElementById("downloadSection").style.display = "block";
-    
-    // When downloading, fetch the SVG from the external source using a CORS proxy.
-    document.getElementById("downloadBtn").onclick = async function () {
-      try {
-        /* 
-          Use a CORS proxy to bypass CORS restrictions.
-          You can choose a free proxy such as:
-            - "https://thingproxy.freeboard.io/fetch/"
-            - "https://cors-anywhere.herokuapp.com/" (requires manual activation)
-          Here we use the thingproxy service:
-        */
-        const proxyUrl = "https://thingproxy.freeboard.io/fetch/";
-        const fetchUrl = proxyUrl + imageUrl;
-        
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-          alert("Failed to fetch SVG");
-          return;
+  // Al submit del form, costruisce l'URL per recuperare l'SVG e lo inietta inline nel DOM.
+      document.getElementById("svgForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value.trim();
+        if (!username) return;
+
+        // Crea l'URL dell'SVG con il tema "radical".
+        const externalUrl = "https://streak-stats.demolab.com/?user=" +
+          encodeURIComponent(username) + "&theme=radical";
+
+        // Usiamo un proxy CORS (ThingProxy) per recuperare l'SVG in quanto il browser non ci permetterebbe di fetcharlo direttamente.
+        const proxy = "https://thingproxy.freeboard.io/fetch/";
+        // Importante: codifica l'URL del servizio prima di concatenarlo.
+        const fetchUrl = proxy + encodeURIComponent(externalUrl);
+
+        try {
+          const response = await fetch(fetchUrl);
+          if (!response.ok) {
+            alert("Failed to fetch SVG (status " + response.status + ")");
+            return;
+          }
+          // Otteniamo il contenuto SVG come testo.
+          const svgContent = await response.text();
+          // Inietta il contenuto SVG direttamente nel DOM (inline) in modo da avere il suo intero DOM.
+          document.getElementById("preview").innerHTML = svgContent;
+          document.getElementById("downloadSection").style.display = "block";
+        } catch (err) {
+          alert("Error fetching SVG: " + err.message);
+          console.error(err);
         }
-        const svgContent = await response.text();
-        const blob = new Blob([svgContent], { type: "image/svg+xml" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "steak-stats.svg";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } catch (error) {
-        alert("Error fetching SVG");
-        console.error(error);
+      });
+      
+      // Funzione per inlinare gli stili computati in ciascun elemento dell'SVG.
+      function inlineStyles(svgElement) {
+        inlineComputedStyle(svgElement);
+        // Seleziona tutti gli elementi figli.
+        const elements = svgElement.querySelectorAll("*");
+        elements.forEach(el => {
+          inlineComputedStyle(el);
+        });
       }
-    };
-});
+      
+      function inlineComputedStyle(el) {
+        const computed = window.getComputedStyle(el);
+        let styleStr = "";
+        for (let i = 0; i < computed.length; i++) {
+          const prop = computed[i];
+          const value = computed.getPropertyValue(prop);
+          styleStr += prop + ":" + value + ";";
+        }
+        el.setAttribute("style", styleStr);
+      }
+      
+      // Al click del pulsante di download, si inlinano gli stili, si serializza l'SVG e si scarica.
+      document.getElementById("downloadBtn").addEventListener("click", function () {
+        try {
+          // Seleziona il nodo SVG inline.
+          const svgElement = document.querySelector("#preview svg");
+          if (!svgElement) {
+            alert("SVG non disponibile per il download.");
+            return;
+          }
+          // Inline tutti gli stili computati per preservare l'aspetto completo.
+          inlineStyles(svgElement);
+          // Serializza l'elemento SVG in una stringa.
+          const serializer = new XMLSerializer();
+          const svgString = serializer.serializeToString(svgElement);
+          const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "steak-stats-completo.svg";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          alert("Error downloading SVG: " + error.message);
+          console.error(error);
+        }
+      });
