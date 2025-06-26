@@ -1,7 +1,7 @@
 # Steak Stats SVG Generator for Github
 #### Author: Bocaletto Luca
 
-A simple, client-side web application that generates a custom GitHub streak SVG based on a user-provided username. No API calls, tokens, or installations are required. Just enter your GitHub username and download a ready-to-use SVG to showcase your GitHub streak in your README.
+A simple, client-side web application that generates a custom GitHub streak SVG based on a user-provided username. No API calls, tokens, or installations are required. Just enter your GitHub username and download a ready-to-use SVG to showcase your GitHub streak.
 
 [![Test Online](https://img.shields.io/badge/Test%20Online-Click%20Here-blue)](https://bocaletto-luca.github.io/steak-stats-svg-generator/)
 
