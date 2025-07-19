@@ -5,6 +5,8 @@ A simple, client-side web application that generates a custom GitHub streak SVG 
 
 [![Test Online](https://img.shields.io/badge/Test%20Online-Click%20Here-blue)](https://bocaletto-luca.github.io/Steak-Stats-SVG-Generator/)
 
+in github server no work for limitation github, install in your server
+
 Please Try in you server Web.
 
 ## Features
